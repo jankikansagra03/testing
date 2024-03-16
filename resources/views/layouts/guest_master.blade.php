@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colorful Todo Application</title>
-    <link rel="stylesheet" href="{{ URL::to('/') }}/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ URL::to('/') }}/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ URL::to('/') }}/css/bootstrap.css">
     <script src="{{ URL::to('/') }}/js/jquery.js"></script>
     <script src="{{ URL::to('/') }}/js/popper.min.js"></script>
     <script src="{{ URL::to('/') }}/js/bootstrap.js"></script>
     <link rel="stylesheet" href="{{ URL::to('/') }}/fontawesome/css/all.css">
+    <link rel="stylesheet" href="{{ URL::to('/') }}/css/style.css">
 
 </head>
 
