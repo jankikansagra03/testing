@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Registrations;
 
 class SampleController extends Controller
 {
@@ -31,7 +32,7 @@ class SampleController extends Controller
     {
         $validated = Validator::make($req->all(), [
             'fullname' => 'required|regex:/^[A-Za-z ]{2,30}$/',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:registration',
             'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/',
             'gender' => 'required',
             'mobile_number' => 'required|regex:/^[0-9]{10}$/',
@@ -59,6 +60,22 @@ class SampleController extends Controller
 
         if ($validated->fails()) {
             return redirect('register')->withErrors($validated)->withInput();
+        }
+        $reg = new Registrations();
+        $reg->fullname = $req->fullname;
+        $reg->email = $req->email;
+        $reg->password = $req->password;
+        $reg->gender = $req->gender;
+        $reg->mobile = $req->mobile_number;
+        $reg->hobbies = $req->fullname;
+        $reg->profile_picture = $req->profile_picture->getClientOriginalName();
+
+        if ($reg->save()) {
+            $req->profile_picture->move("uploads/", $req->profile_picture->getClientOriginalName());
+            session()->flash('success', 'Registration Successfull');
+        } else {
+            session()->flash('error', 'Registration Failed');
+            return redirect('register');
         }
         return redirect('login');
     }
