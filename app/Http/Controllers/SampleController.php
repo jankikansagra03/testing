@@ -30,13 +30,14 @@ class SampleController extends Controller
     public function register_submit(Request $req)
     {
         $validated = Validator::make($req->all(), [
-            'fullname' => 'required|regex:/^[A-Za-z ]{2,30}',
+            'fullname' => 'required|regex:/^[A-Za-z ]{2,30}$/',
             'email' => 'required|email',
             'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/',
             'gender' => 'required',
             'mobile_number' => 'required|regex:/^[0-9]{10}$/',
             'password_confirmation' => 'required',
             'profile_picture' => 'required|mimes:jpeg,png,jpg,gif|max:2048',
+            'hobbies' => 'required',
         ], [
             'fullname.required' => 'The full name field is required.',
             'fullname.regex' => 'The full name must contain only alphabets and length must 2 to 30 charcaters',
@@ -53,6 +54,7 @@ class SampleController extends Controller
             'profile_picture.required' => 'The profile picture field is required.',
             'profile_picture.mimes' => 'The profile picture must be a file of type: jpeg, png, jpg, gif.',
             'profile_picture.max' => 'The profile picture may not be greater than 2MB.',
+            'hobbies.required' => 'Select atleast one Hobby.',
         ]);
 
         if ($validated->fails()) {
