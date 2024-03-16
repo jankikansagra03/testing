@@ -67,7 +67,8 @@ class SampleController extends Controller
         $reg->password = $req->password;
         $reg->gender = $req->gender;
         $reg->mobile = $req->mobile_number;
-        $reg->hobbies = $req->fullname;
+        $hobbies = $req->input('hobbies');
+        $reg->hobbies = implode(',', $hobbies);
         $reg->profile_picture = $req->profile_picture->getClientOriginalName();
 
         if ($reg->save()) {
