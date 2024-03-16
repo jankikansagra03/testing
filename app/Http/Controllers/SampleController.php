@@ -80,4 +80,12 @@ class SampleController extends Controller
         }
         return redirect('login');
     }
+
+    public function fetch_registration_data()
+    {
+        $reg = new Registrations();
+
+        $result = $reg->select()->get();
+        return view('Registration_data', compact('result'));
+    }
 }

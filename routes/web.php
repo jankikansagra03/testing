@@ -24,3 +24,4 @@ Route::get('contact', [SampleController::class, 'contact_page']);
 Route::get('login', [SampleController::class, 'login_page']);
 Route::get('register', [SampleController::class, 'register_page']);
 Route::post('form_register_submit', [SampleController::class, 'register_submit']);
+Route::get('view_registration_data', [SampleController::class, 'fetch_registration_data']);
