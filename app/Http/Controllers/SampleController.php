@@ -88,4 +88,13 @@ class SampleController extends Controller
         $result = $reg->select()->get();
         return view('Registration_data', compact('result'));
     }
+
+    public function edit_user($em)
+    {
+        // echo $em;
+        $reg = new Registrations();
+
+        $result = $reg->where('email', $em)->get();
+        return view('edit_user_form', compact('result'));
+    }
 }
