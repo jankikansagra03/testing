@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Registrations;
+use Illuminate\Support\Facades\Mail;
 
 class SampleController extends Controller
 {
@@ -72,6 +73,11 @@ class SampleController extends Controller
         $reg->profile_picture = $req->profile_picture->getClientOriginalName();
 
         if ($reg->save()) {
+            $data = array('name' => $req->fullname, 'email' => $req->email);
+            Mail::Send(['text' => 'create_account_mail'], ["data1" => $data], function ($message) use ($data) {
+                $message->to($data['email'], $data['name']);
+                $message->from("jankikansagra12@gmail.com", "Janki Kansagra");
+            });
             $req->profile_picture->move("uploads/", $req->profile_picture->getClientOriginalName());
             session()->flash('success', 'Registration Successfull');
         } else {
@@ -96,5 +102,51 @@ class SampleController extends Controller
 
         $result = $reg->where('email', $em)->get();
         return view('edit_user_form', compact('result'));
+    }
+    public function Activate_account($email)
+    {
+        $result = Registrations::whereEmail($email)->first();
+        if (empty($result)) {
+            session()->flash('error', 'Your account is not registered. Kindly register here.');
+            return redirect('register');
+        } else {
+            if ($result->status == 'Active') {
+                session()->flash('success', 'Your account is already activated kindly login');
+            } else {
+                $update = Registrations::where('email', $email)->update(array('status' => 'Active'));
+                if ($update) {
+                    session()->flash('success', 'Your account is activated successfully.');
+                } else {
+                    session()->flash('error', 'Account activation failed please try after sometime.');
+                }
+            }
+            return redirect('login');
+        }
+    }
+
+    public function login_action(Request $req)
+    {
+        $em = $req->email;
+        $pwd = $req->password;
+
+        $result = Registrations::where('email', $em)->where('password', $pwd)->first();
+        if (empty($result)) {
+            session()->flash('error', 'Incorrect Username or Password');
+            return redirect('login');
+        } else {
+            if ($result->status == 'Inactive') {
+                session()->flash('error', 'Your Account is not activated. Kindly Activate yor account by verifying your email address using the verification link sent to your email account');
+                return redirect('login');
+            } else {
+                if ($result->role == 'Admin') {
+                    session()->put('admin_uname',$em);
+                    return redirect('admin_dashboard');
+
+                } else {
+                    session()->put('user_uname', $em);
+                    return redirect('user_dashboard');
+                }
+            }
+        }
     }
 }
