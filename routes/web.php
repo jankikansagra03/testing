@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SampleController;
 use App\Http\Controllers\UserDashboard;
-use App\Http\Middleware\commonMiddleware;
 use App\Http\Controllers\AdminController;
+use App\Http\Middleware\AdminAuthentication;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -38,11 +38,12 @@ Route::get('contact', [SampleController::class, 'contact_page']);
 // });
 
 //User Dashnoard Routes
-Route::get('user_dashboard', [UserDashboard::class, 'user_dashboard'])->middleware('testing::class');
-Route::get('add_task', [UserDashboard::class, 'add_task'])->middleware('testing::class');
-Route::get('edit_profile', [UserDashboard::class, 'edit_profile'])->middleware('testing::class');
+Route::get('user_dashboard', [UserDashboard::class, 'user_dashboard'])->middleware('user_auth::class');
+Route::get('add_task', [UserDashboard::class, 'add_task'])->middleware('user_auth::class');
+Route::get('edit_profile', [UserDashboard::class, 'edit_profile'])->middleware('user_auth::class');
 
 
 // Admin Dashboard Routes
 Route::get('admin_dashboard', [AdminController::class, 'admin_dashboard'])->middleware('admin_auth::class');
 Route::get('admin_edit_profile', [AdminController::class, 'admin_edit_profile'])->middleware('admin_auth::class');
+Route::post('admin_update_form',[AdminController::class, 'admin_update_profile'])->middleware('admin_auth::class');
