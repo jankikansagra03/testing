@@ -46,4 +46,6 @@ Route::get('edit_profile', [UserDashboard::class, 'edit_profile'])->middleware('
 // Admin Dashboard Routes
 Route::get('admin_dashboard', [AdminController::class, 'admin_dashboard'])->middleware('admin_auth::class');
 Route::get('admin_edit_profile', [AdminController::class, 'admin_edit_profile'])->middleware('admin_auth::class');
-Route::post('admin_update_form',[AdminController::class, 'admin_update_profile'])->middleware('admin_auth::class');
+Route::post('admin_update_form', [AdminController::class, 'admin_update_profile'])->middleware('admin_auth::class');
+Route::get('admin_change_password', [AdminController::class, 'admin_change_password'])->middleware('admin_auth::class');
+Route::post('update_admin_password', [AdminController::class, 'update_admin_password'])->middleware('admin_auth::class');

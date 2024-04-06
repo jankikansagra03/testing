@@ -48,7 +48,7 @@
                             class="fa-solid fa-address-card"></i>&nbsp; Edit Profile</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ URL::to('/') }}/change_password"><i
+                    <a class="nav-link" href="{{ URL::to('/') }}/admin_change_password"><i
                             class="fa-solid fa-lock fa-lg"></i>&nbsp; Change Password</a>
                 </li>
                 <li class="nav-item">

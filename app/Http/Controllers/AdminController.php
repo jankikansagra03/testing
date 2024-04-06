@@ -66,4 +66,46 @@ class AdminController extends Controller
         }
         return redirect('admin_edit_profile');
     }
+
+
+    public function admin_change_password()
+    {
+        return view('admin_change_password');
+    }
+    public function update_admin_password(Request $request)
+    {
+        $validated = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'password' => 'required|min:8|confirmed|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/',
+            'password_confirmation' => 'required',
+
+        ], [
+            'old_password.required' => 'old Password cannot be Empty',
+            'password.required' => 'The password field is required.',
+            'password.min' => 'The password must be at least 8 characters.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'password.regex' => 'The password must contain one small letter on capital ',
+            'password_confirmation.required' => 'The password confirmation field cannot be empty',
+        ]);
+
+        if ($validated->fails()) {
+            return redirect('admin_change_password')->withErrors($validated)->withInput();
+        }
+
+        $email = session()->get('admin_uname');
+        $result = Registrations::where('email', $email)->first();
+        if ($result->password == $request->old_password) {
+            $updt_password = Registrations::where('email', $email)->update(array('password' => $request->password));
+            if ($updt_password) {
+                session()->flash('success', 'Password Updated Successfully');
+                return redirect('admin_dashboard');
+            } else {
+                session()->flash('error', 'Error in updating Password');
+                return redirect('admin_change_password');
+            }
+        } else {
+            session()->flash('error', 'Incorrect Old Password');
+            return redirect('admin_change_password');
+        }
+    }
 }
